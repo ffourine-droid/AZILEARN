@@ -72,7 +72,7 @@ export default function App() {
           <div className="w-10 h-10 bg-orange-primary rounded-xl flex items-center justify-center text-white text-xl transition-transform group-hover:scale-110">
             🧪
           </div>
-          <span className="font-display font-extrabold text-xl tracking-wider text-text-primary">AZILEARN</span>
+          <span className="font-display font-extrabold text-lg tracking-wider text-text-primary">AZILEARN</span>
         </a>
         <a 
           href="https://interactive-sigma-seven.vercel.app" 
@@ -99,7 +99,7 @@ export default function App() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="font-display font-extrabold text-5xl md:text-7xl lg:text-8xl leading-[1.05] tracking-tight max-w-4xl mb-6"
+          className="font-display font-extrabold text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-tight max-w-4xl mb-6"
         >
           Study Smarter with <em className="not-italic text-orange-primary">Interactive</em> CBC Notes
         </motion.h1>
@@ -108,7 +108,7 @@ export default function App() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-lg md:text-xl text-text-dim max-w-xl leading-relaxed font-light mb-12"
+          className="text-base md:text-lg text-text-dim max-w-xl leading-relaxed font-light mb-12"
         >
           AziLearn gives Kenyan Junior Secondary students interactive notes, presentation slides, audio narration, and quizzes — not boring PDFs. Pay with M-Pesa, learn instantly.
         </motion.p>
@@ -127,7 +127,7 @@ export default function App() {
           </a>
           <a 
             href="#subjects" 
-            className="bg-transparent text-text-primary font-display font-semibold text-base px-9 py-4 rounded-xl border border-white/10 transition-all hover:border-orange-primary hover:text-orange-primary hover:-translate-y-1"
+            className="bg-transparent text-text-primary font-display font-semibold text-base px-9 py-4 rounded-xl border border-black/10 transition-all hover:border-orange-primary hover:text-orange-primary hover:-translate-y-1"
           >
             View Subjects
           </a>
@@ -147,8 +147,8 @@ export default function App() {
       {/* SUBJECTS */}
       <section id="subjects" className="max-w-6xl mx-auto px-6 py-24">
         <div className="text-xs font-semibold tracking-[0.15em] uppercase text-orange-primary mb-4">What We Cover</div>
-        <h2 className="font-display font-extrabold text-4xl md:text-5xl leading-tight mb-4">CBC Subjects,<br/>Brought to Life</h2>
-        <p className="text-text-dim text-lg leading-relaxed max-w-lg font-light mb-14">
+        <h2 className="font-display font-extrabold text-3xl md:text-4xl leading-tight mb-4">CBC Subjects,<br/>Brought to Life</h2>
+        <p className="text-text-dim text-base leading-relaxed max-w-lg font-light mb-14">
           Every subject is built with animations, drag-and-drop activities, and self-tests — designed around the official KICD CBC syllabus.
         </p>
 
@@ -172,8 +172,8 @@ export default function App() {
       <section className="bg-bg-card border-t border-orange-primary/15">
         <div className="max-w-6xl mx-auto px-6 py-24">
           <div className="text-xs font-semibold tracking-[0.15em] uppercase text-orange-primary mb-4">What's Included</div>
-          <h2 className="font-display font-extrabold text-4xl md:text-5xl leading-tight mb-4">Everything a Student Needs</h2>
-          <p className="text-text-dim text-lg leading-relaxed max-w-lg font-light mb-14">
+          <h2 className="font-display font-extrabold text-3xl md:text-4xl leading-tight mb-4">Everything a Student Needs</h2>
+          <p className="text-text-dim text-base leading-relaxed max-w-lg font-light mb-14">
             Every subscription gives you access to three types of learning materials, all CBC-aligned.
           </p>
           
@@ -196,7 +196,7 @@ export default function App() {
       <section className="bg-bg-card border-y border-orange-primary/15">
         <div className="max-w-6xl mx-auto px-6 py-24">
           <div className="text-xs font-semibold tracking-[0.15em] uppercase text-orange-primary mb-4">How It Works</div>
-          <h2 className="font-display font-extrabold text-4xl md:text-5xl leading-tight mb-16 text-center md:text-left">3 Steps to Start Learning</h2>
+          <h2 className="font-display font-extrabold text-3xl md:text-4xl leading-tight mb-16 text-center md:text-left">3 Steps to Start Learning</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-l border-orange-primary/15 md:border-l-0">
             {steps.map((step, i) => (
@@ -213,8 +213,8 @@ export default function App() {
       {/* PRICING */}
       <section id="pricing" className="max-w-6xl mx-auto px-6 py-24">
         <div className="text-xs font-semibold tracking-[0.15em] uppercase text-orange-primary mb-4">Subscription Plans</div>
-        <h2 className="font-display font-extrabold text-4xl md:text-5xl leading-tight mb-4">Simple, Affordable Pricing</h2>
-        <p className="text-text-dim text-lg leading-relaxed max-w-lg font-light mb-14">
+        <h2 className="font-display font-extrabold text-3xl md:text-4xl leading-tight mb-4">Simple, Affordable Pricing</h2>
+        <p className="text-text-dim text-base leading-relaxed max-w-lg font-light mb-14">
           All plans give full access to every subject and every grade. Pay with M-Pesa anytime.
         </p>
 
@@ -223,7 +223,7 @@ export default function App() {
             <motion.div 
               key={i}
               whileHover={{ y: -4 }}
-              className={`relative bg-bg-card-hover border rounded-2xl p-9 transition-all ${plan.featured ? 'border-orange-primary bg-gradient-to-br from-[#1a1005] to-bg-card-hover shadow-[0_0_40px_rgba(255,107,0,0.1)]' : 'border-orange-primary/15'}`}
+              className={`relative bg-bg-card-hover border rounded-2xl p-9 transition-all ${plan.featured ? 'border-orange-primary bg-gradient-to-br from-[#fff7ed] to-bg-card-hover shadow-[0_10px_40px_rgba(255,107,0,0.1)]' : 'border-orange-primary/15'}`}
             >
               {plan.featured && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-primary text-white font-display font-bold text-[0.7rem] tracking-widest uppercase px-4 py-1 rounded-full whitespace-nowrap">

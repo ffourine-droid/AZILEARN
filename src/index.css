@@ -7,11 +7,11 @@
   
   --color-orange-primary: #FF6B00;
   --color-orange-bright: #FF8C2A;
-  --color-bg-dark: #0A0A0A;
-  --color-bg-card: #111111;
-  --color-bg-card-hover: #181818;
-  --color-text-primary: #F5F0E8;
-  --color-text-dim: #888880;
+  --color-bg-dark: #FFFFFF;
+  --color-bg-card: #F9F9F9;
+  --color-bg-card-hover: #F0F0F0;
+  --color-text-primary: #1A1A1A;
+  --color-text-dim: #666666;
 }
 
 @layer base {
