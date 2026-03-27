@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import React, { useState, useEffect } from "react";
 import { 
   BookOpen, 
   Globe, 
@@ -10,6 +11,7 @@ import {
   MessageSquare, 
   Check, 
   ArrowRight,
+  Download,
   Music,
   Layout,
   FileText
@@ -62,6 +64,37 @@ const plans = [
 ];
 
 export default function App() {
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    const handler = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+      }
+    } else {
+      // Fallback for iOS or browsers that don't support beforeinstallprompt
+      // We'll open the link provided by the user
+      window.open("https://interactive-sigma-seven.vercel.app", "_blank");
+      
+      // Simple alert for iOS users
+      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+        alert("To install AziLearn on your iPhone: Tap the 'Share' button in Safari and select 'Add to Home Screen'.");
+      }
+    }
+  };
+
   return (
     <div className="relative min-h-screen">
       <div className="noise-overlay" />
@@ -74,12 +107,20 @@ export default function App() {
           </div>
           <span className="font-display font-extrabold text-lg tracking-wider text-text-primary">AZILEARN</span>
         </a>
-        <a 
-          href="https://interactive-sigma-seven.vercel.app" 
-          className="bg-orange-primary hover:bg-orange-bright text-white font-display font-semibold text-xs tracking-widest uppercase px-6 py-2.5 rounded-lg transition-all hover:-translate-y-0.5"
-        >
-          Login <ArrowRight className="inline-block w-4 h-4 ml-1" />
-        </a>
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={handleDownload}
+            className="hidden md:flex items-center gap-2 bg-black text-white font-display font-semibold text-xs tracking-widest uppercase px-6 py-2.5 rounded-lg transition-all hover:bg-gray-800 hover:-translate-y-0.5"
+          >
+            <Download className="w-4 h-4" /> Download App
+          </button>
+          <a 
+            href="https://interactive-sigma-seven.vercel.app" 
+            className="bg-orange-primary hover:bg-orange-bright text-white font-display font-semibold text-xs tracking-widest uppercase px-6 py-2.5 rounded-lg transition-all hover:-translate-y-0.5"
+          >
+            Login <ArrowRight className="inline-block w-4 h-4 ml-1" />
+          </a>
+        </div>
       </nav>
 
       {/* HERO */}
@@ -92,7 +133,7 @@ export default function App() {
           className="inline-flex items-center gap-2 bg-orange-primary/10 border border-orange-primary/15 rounded-full px-4 py-1.5 text-[0.78rem] font-medium text-orange-bright tracking-wider uppercase mb-8"
         >
           <span className="w-1.5 h-1.5 bg-orange-primary rounded-full animate-pulse-slow" />
-          Kenya CBC Curriculum · Grades 7–9
+          Kenya CBC & KCSE · Grades 1–12
         </motion.div>
 
         <motion.h1 
@@ -110,7 +151,7 @@ export default function App() {
           transition={{ delay: 0.2 }}
           className="text-base md:text-lg text-text-dim max-w-xl leading-relaxed font-light mb-12"
         >
-          AziLearn gives Kenyan Junior Secondary students interactive notes, presentation slides, audio narration, and quizzes — not boring PDFs. Pay with M-Pesa, learn instantly.
+          AziLearn gives Kenyan students from Grade 1 to 12, including KCSE candidates, interactive notes, presentation slides, audio narration, and quizzes — not boring PDFs. Pay with M-Pesa, learn instantly.
         </motion.p>
 
         <motion.div 
@@ -125,6 +166,12 @@ export default function App() {
           >
             Get Started
           </a>
+          <button 
+            onClick={handleDownload}
+            className="bg-black hover:bg-gray-800 text-white font-display font-bold text-base px-9 py-4 rounded-xl transition-all shadow-[0_0_30px_rgba(0,0,0,0.1)] hover:-translate-y-1 flex items-center gap-2"
+          >
+            <Download className="w-5 h-5" /> Download App
+          </button>
           <a 
             href="#subjects" 
             className="bg-transparent text-text-primary font-display font-semibold text-base px-9 py-4 rounded-xl border border-black/10 transition-all hover:border-orange-primary hover:text-orange-primary hover:-translate-y-1"
@@ -136,7 +183,7 @@ export default function App() {
 
       {/* GRADES STRIP */}
       <div className="border-y border-orange-primary/15 py-5 flex flex-wrap items-center justify-center gap-8 md:gap-12 bg-bg-card px-6">
-        {["Grade 7 Content", "Grade 8 Content", "Grade 9 Content", "Competency-Based Curriculum", "M-Pesa Payments"].map((item, i) => (
+        {["Grades 1–6 (Primary)", "Grades 7–9 (JSS)", "Grades 10–12 (SSS)", "KCSE Revision (Form 1–4)", "M-Pesa Payments"].map((item, i) => (
           <div key={i} className="flex items-center gap-2.5 text-sm text-text-dim font-normal whitespace-nowrap">
             <div className="w-2 h-2 bg-orange-primary rounded-full" />
             {item}
@@ -162,7 +209,7 @@ export default function App() {
               <div className="absolute top-0 left-0 right-0 h-0.5 bg-orange-primary scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100" />
               <subject.icon className={`w-10 h-10 mb-4 ${subject.color}`} />
               <div className="font-display font-bold text-base mb-1.5">{subject.name}</div>
-              <div className="text-xs text-text-dim">Grades 7 – 9</div>
+              <div className="text-xs text-text-dim">Grades 1 – 12 & KCSE</div>
             </motion.div>
           ))}
         </div>
@@ -236,7 +283,7 @@ export default function App() {
               </div>
               <p className="text-sm text-text-dim font-light mb-7 leading-relaxed">{plan.desc}</p>
               <ul className="space-y-2.5">
-                {["Full subject access", "All Grades 7–9", "Interactive notes & slides", "Audio narration", "Quizzes & activities", "Pay via M-Pesa"].map((feat, j) => (
+                {["Full subject access", "All Grades 1–12 & KCSE", "Interactive notes & slides", "Audio narration", "Quizzes & activities", "Pay via M-Pesa"].map((feat, j) => (
                   <li key={j} className="text-sm text-text-dim flex items-center gap-2.5">
                     <Check className="w-4 h-4 text-orange-primary" />
                     {feat}
