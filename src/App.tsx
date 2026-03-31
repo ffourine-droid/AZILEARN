@@ -1,9 +1,14 @@
 import { motion } from "motion/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { 
   ArrowRight,
   Download,
-  Star
+  Star,
+  Check,
+  Smartphone,
+  Monitor as MonitorIcon,
+  Apple,
+  Chrome
 } from "lucide-react";
 
 const subjects = [
@@ -41,7 +46,51 @@ const testimonials = [
   { name: "Grace N.", role: "Parent, Mombasa", initial: "GN", text: "My son went from struggling to explaining topics to me. AziLearn made the difference this term." },
 ];
 
+// Global variable to capture the beforeinstallprompt event if it fires before mount
+let globalDeferredPrompt: any = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  globalDeferredPrompt = e;
+});
+
 export default function App() {
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(globalDeferredPrompt);
+  const [showInstructions, setShowInstructions] = useState(false);
+
+  useEffect(() => {
+    // Redirect to the actual app if running in standalone mode (installed PWA)
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone;
+    if (isStandalone) {
+      window.location.href = "https://interactive-sigma-seven.vercel.app";
+    }
+
+    const handler = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstall = async () => {
+    // If we have the deferred prompt, use it
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+        globalDeferredPrompt = null;
+      }
+      return;
+    }
+
+    // If no prompt, show the instructions modal
+    setShowInstructions(true);
+  };
+
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
   return (
     <div className="min-h-screen font-sans bg-off-white text-black overflow-x-hidden">
       {/* NAV */}
@@ -54,17 +103,17 @@ export default function App() {
           <li><a href="#subjects" className="text-sm text-gray font-medium hover:text-black transition-colors">Subjects</a></li>
           <li><a href="#features" className="text-sm text-gray font-medium hover:text-black transition-colors">Features</a></li>
           <li>
-            <a 
-              href="https://interactive-sigma-seven.vercel.app"
-              className="flex items-center gap-2 bg-black text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-orange transition-colors"
+            <button 
+              onClick={handleInstall}
+              className="flex items-center gap-2 text-sm font-semibold text-gray hover:text-orange transition-colors"
             >
-              <Download className="w-4 h-4" /> Download App
-            </a>
+              <Download className="w-4 h-4" /> Download
+            </button>
           </li>
           <li><a href="https://interactive-sigma-seven.vercel.app" className="bg-black text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-orange transition-colors">Start Learning</a></li>
         </ul>
         <div className="md:hidden flex items-center gap-3">
-          <a href="https://interactive-sigma-seven.vercel.app" className="p-2 bg-black text-white rounded-full"><Download className="w-4 h-4" /></a>
+          <button onClick={handleInstall} className="p-2 bg-black text-white rounded-full"><Download className="w-4 h-4" /></button>
           <a href="https://interactive-sigma-seven.vercel.app" className="bg-black text-white px-4 py-2 rounded-full text-xs font-semibold">Login</a>
         </div>
       </nav>
@@ -111,12 +160,12 @@ export default function App() {
           <a href="https://interactive-sigma-seven.vercel.app" className="bg-orange text-white px-8 py-4 rounded-full text-base font-bold font-display hover:bg-orange-dark transition-all hover:-translate-y-0.5 flex items-center gap-2 shadow-lg shadow-orange/20">
             Start Learning <ArrowRight className="w-5 h-5" />
           </a>
-          <a 
-            href="https://interactive-sigma-seven.vercel.app"
+          <button 
+            onClick={handleInstall}
             className="bg-transparent text-black px-8 py-4 rounded-full text-base font-semibold border-2 border-black hover:bg-black hover:text-white transition-all flex items-center gap-2"
           >
             <Download className="w-5 h-5" /> Download App
-          </a>
+          </button>
         </motion.div>
 
         <motion.p 
@@ -229,9 +278,12 @@ export default function App() {
           <p className="text-[#999] text-lg max-w-[480px] mx-auto leading-relaxed mb-10 relative">Don't wait for exam time to start revising. Join the students who are already ahead — and stay there.</p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 relative">
             <a href="https://interactive-sigma-seven.vercel.app" className="bg-orange text-white px-10 py-4 rounded-full text-lg font-bold font-display hover:bg-orange-dark transition-all">Start Learning Now →</a>
-            <a href="https://interactive-sigma-seven.vercel.app" className="bg-white text-black px-10 py-4 rounded-full text-lg font-bold font-display hover:bg-gray-light transition-all flex items-center gap-2">
+            <button 
+              onClick={handleInstall}
+              className="bg-white text-black px-10 py-4 rounded-full text-lg font-bold font-display hover:bg-gray-light transition-all flex items-center gap-2"
+            >
               <Download className="w-5 h-5" /> Download App
-            </a>
+            </button>
           </div>
           <p className="mt-6 text-[0.8rem] text-[#666] relative">Access is open now. A small fee will apply as we grow — we'll always tell you before that happens.</p>
         </section>
@@ -242,13 +294,85 @@ export default function App() {
         <a href="/" className="font-display font-extrabold text-xl tracking-tighter">
           Azi<span className="text-orange">Learn</span>
         </a>
-        <ul className="flex gap-6 list-none">
+        <ul className="flex flex-wrap justify-center gap-6 list-none">
           <li><a href="#subjects" className="text-[0.82rem] text-gray hover:text-orange transition-colors">Subjects</a></li>
           <li><a href="#how" className="text-[0.82rem] text-gray hover:text-orange transition-colors">How it works</a></li>
+          <li>
+            <button 
+              onClick={handleInstall}
+              className="text-[0.82rem] text-gray hover:text-orange transition-colors"
+            >
+              Download App
+            </button>
+          </li>
           <li><a href="mailto:hello@azilearn.co.ke" className="text-[0.82rem] text-gray hover:text-orange transition-colors">Contact</a></li>
         </ul>
         <p className="text-[0.82rem] text-gray">© 2025 AziLearn · Built in Kenya 🇰🇪</p>
       </footer>
+
+      {/* INSTRUCTIONS MODAL */}
+      {showInstructions && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-6">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowInstructions(false)} />
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-[32px] p-8 md:p-10 max-w-md w-full relative z-[201] shadow-2xl"
+          >
+            <div className="w-12 h-12 bg-orange-pale rounded-2xl flex items-center justify-center text-orange mb-6">
+              <Download className="w-6 h-6" />
+            </div>
+            <h3 className="font-display text-2xl font-bold mb-4">Install AziLearn</h3>
+            
+            <div className="space-y-6 mb-8">
+              {isIOS ? (
+                <div className="space-y-4">
+                  <p className="text-gray text-sm leading-relaxed">To install on your iPhone or iPad:</p>
+                  <ol className="text-sm text-gray space-y-3 list-decimal pl-4">
+                    <li>Tap the <strong>Share</strong> button (square with up arrow) in Safari.</li>
+                    <li>Scroll down and tap <strong>'Add to Home Screen'</strong>.</li>
+                    <li>Tap <strong>'Add'</strong> to confirm.</li>
+                  </ol>
+                </div>
+              ) : isSafari ? (
+                <div className="space-y-4">
+                  <p className="text-gray text-sm leading-relaxed">To install on Safari:</p>
+                  <ol className="text-sm text-gray space-y-3 list-decimal pl-4">
+                    <li>Go to <strong>File</strong> in the top menu.</li>
+                    <li>Select <strong>'Add to Dock'</strong> or <strong>'Add to Home Screen'</strong>.</li>
+                  </ol>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <p className="text-gray text-sm leading-relaxed">To install on your device:</p>
+                  <ol className="text-sm text-gray space-y-3 list-decimal pl-4">
+                    <li>Open your browser menu (the <strong>three dots</strong> in the corner).</li>
+                    <li>Look for <strong>'Install App'</strong> or <strong>'Add to Home Screen'</strong>.</li>
+                    <li>Follow the prompts to finish.</li>
+                  </ol>
+                </div>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <button 
+                onClick={() => setShowInstructions(false)}
+                className="w-full bg-black text-white py-4 rounded-full font-bold hover:bg-gray-800 transition-colors"
+              >
+                Got it
+              </button>
+              <a 
+                href="https://interactive-sigma-seven.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-gray-light text-black py-4 rounded-full font-bold text-center hover:bg-gray-200 transition-colors"
+              >
+                Just open in browser
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
