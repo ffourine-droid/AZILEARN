@@ -1,316 +1,253 @@
 import { motion } from "motion/react";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { 
-  BookOpen, 
-  Globe, 
-  Sprout, 
-  Palette, 
-  FlaskConical, 
-  Divide, 
-  Monitor, 
-  MessageSquare, 
-  Check, 
   ArrowRight,
   Download,
-  Music,
-  Layout,
-  FileText
+  Star
 } from "lucide-react";
 
 const subjects = [
-  { name: "Social Studies", icon: Globe, color: "text-blue-400" },
-  { name: "Agriculture", icon: Sprout, color: "text-green-400" },
-  { name: "Creative Arts & Sports", icon: Palette, color: "text-purple-400" },
-  { name: "Integrated Science", icon: FlaskConical, color: "text-cyan-400" },
-  { name: "Mathematics", icon: Divide, color: "text-red-400" },
-  { name: "Business Studies", icon: Monitor, color: "text-indigo-400" },
-  { name: "English", icon: BookOpen, color: "text-yellow-400" },
-  { name: "Kiswahili", icon: MessageSquare, color: "text-orange-400" },
-];
-
-const features = [
-  {
-    title: "Interactive Notes",
-    desc: "Animated, drag-and-drop study notes with embedded quizzes and instant feedback — designed to make learning stick.",
-    icon: FileText,
-    emoji: "📝"
-  },
-  {
-    title: "Presentation Slides",
-    desc: "Clean, curriculum-aligned slides covering each topic clearly — great for revision and classroom follow-up.",
-    icon: Layout,
-    emoji: "🖼️",
-    highlight: true
-  },
-  {
-    title: "Audio Narration",
-    desc: "Listen to lessons explained clearly in audio — perfect for students who learn better by listening or studying on the go.",
-    icon: Music,
-    emoji: "🔊"
-  }
+  "Mathematics",
+  "Integrated Science",
+  "Social Studies",
+  "Agriculture",
+  "Business Studies",
+  "Creative Arts & Sports",
+  "CRE",
+  "Physics",
+  "Chemistry",
+  "KCSE Past Papers"
 ];
 
 const steps = [
-  { num: "01", title: "Create Your Account", desc: "Sign up with your phone number in seconds. No email or ID required." },
-  { num: "02", title: "Pick a Plan & Pay via M-Pesa", desc: "Choose daily, weekly, or monthly access. Pay instantly using your M-Pesa number — no card needed." },
-  { num: "03", title: "Access All Subjects", desc: "Unlock the full library of interactive notes, quizzes, and activities across all CBC subjects." },
-  { num: "04", title: "Learn Interactively", desc: "Animated lessons, drag-and-drop exercises, and instant feedback — built for how students actually learn." },
+  { num: "01", icon: "📚", title: "Pick your subject", desc: "Choose from all your CBC Grade 6–9 subjects. Find exactly the topic you need, right when you need it." },
+  { num: "02", icon: "⚡", title: "Study interactively", desc: "No PDFs. Tap through lessons with diagrams, quizzes, and examples that actually make sense." },
+  { num: "03", icon: "🏆", title: "Test yourself", desc: "Take timed exams, track your scores, and earn badges as you complete each topic and subject." },
+  { num: "04", icon: "📈", title: "Watch yourself grow", desc: "Your progress is tracked. See which topics you've mastered and where to focus next." },
 ];
 
-const plans = [
-  { period: "Daily", price: "10", desc: "Perfect for exam revision or a quick study session." },
-  { period: "Weekly", price: "50", desc: "Ideal for consistent weekly study throughout the term.", featured: true },
-  { period: "Monthly", price: "120", desc: "Best value for students who study every day of the term." },
+const features = [
+  { icon: "🎮", title: "Interactive lessons", desc: "Every topic is a live experience — with animations, instant feedback, and zero boring walls of text.", tag: "Available now" },
+  { icon: "⏱️", title: "Timed exams", desc: "Real exam pressure, real practice. Timed tests per topic so you're never caught off guard on exam day.", tag: "Coming soon" },
+  { icon: "🗂️", title: "Project helper", desc: "CBC project work, guided step by step. Get unstuck, structure your ideas, and submit with confidence.", tag: "Coming soon" },
+  { icon: "📊", title: "Progress tracking", desc: "Know exactly where you stand. Every quiz, every topic — logged so you can see the work paying off.", tag: "Coming soon" },
+  { icon: "🏅", title: "Badges & certificates", desc: "Earn subject completion certificates. Real proof of the work you've put in — share it, be proud of it.", tag: "Coming soon" },
+  { icon: "📄", title: "Downloadable notes", desc: "Export any topic as a clean PDF. Study offline, print it out, or revise on the go. Your notes, your way.", tag: "Coming soon" },
+];
+
+const testimonials = [
+  { name: "Amina K.", role: "Grade 8 student, Nairobi", initial: "AK", text: "I used to dread Mathematics. Now I actually get it. The lessons feel like a game, not a punishment." },
+  { name: "Brian M.", role: "Grade 7 student, Kisumu", initial: "BM", text: "I finished the Integrated Science unit in one weekend. The quizzes helped me know what I didn't know." },
+  { name: "Grace N.", role: "Parent, Mombasa", initial: "GN", text: "My son went from struggling to explaining topics to me. AziLearn made the difference this term." },
 ];
 
 export default function App() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-
-  useEffect(() => {
-    const handler = (e: any) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-    };
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
-
-  const handleDownload = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        setDeferredPrompt(null);
-      }
-    } else {
-      // Fallback for iOS or browsers that don't support beforeinstallprompt
-      // We'll open the link provided by the user
-      window.open("https://interactive-sigma-seven.vercel.app", "_blank");
-      
-      // Simple alert for iOS users
-      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-        alert("To install AziLearn on your iPhone: Tap the 'Share' button in Safari and select 'Add to Home Screen'.");
-      }
-    }
-  };
-
   return (
-    <div className="relative min-h-screen">
-      <div className="noise-overlay" />
-      
+    <div className="min-h-screen font-sans bg-off-white text-black overflow-x-hidden">
       {/* NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 bg-bg-dark/85 backdrop-blur-xl border-b border-orange-primary/15">
-        <a href="#" className="flex items-center gap-3 no-underline group">
-          <div className="w-10 h-10 bg-orange-primary rounded-xl flex items-center justify-center text-white text-xl transition-transform group-hover:scale-110">
-            🧪
-          </div>
-          <span className="font-display font-extrabold text-lg tracking-wider text-text-primary">AZILEARN</span>
+      <nav className="sticky top-0 z-[100] bg-off-white/92 backdrop-blur-xl border-b border-gray-light px-6 md:px-16 flex items-center justify-between h-16">
+        <a href="/" className="font-display font-extrabold text-2xl tracking-tighter">
+          Azi<span className="text-orange">Learn</span>
         </a>
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={handleDownload}
-            className="hidden md:flex items-center gap-2 bg-black text-white font-display font-semibold text-xs tracking-widest uppercase px-6 py-2.5 rounded-lg transition-all hover:bg-gray-800 hover:-translate-y-0.5"
-          >
-            <Download className="w-4 h-4" /> Download App
-          </button>
-          <a 
-            href="https://interactive-sigma-seven.vercel.app" 
-            className="bg-orange-primary hover:bg-orange-bright text-white font-display font-semibold text-xs tracking-widest uppercase px-6 py-2.5 rounded-lg transition-all hover:-translate-y-0.5"
-          >
-            Login <ArrowRight className="inline-block w-4 h-4 ml-1" />
-          </a>
+        <ul className="hidden md:flex items-center gap-8 list-none">
+          <li><a href="#how" className="text-sm text-gray font-medium hover:text-black transition-colors">How it works</a></li>
+          <li><a href="#subjects" className="text-sm text-gray font-medium hover:text-black transition-colors">Subjects</a></li>
+          <li><a href="#features" className="text-sm text-gray font-medium hover:text-black transition-colors">Features</a></li>
+          <li>
+            <a 
+              href="https://interactive-sigma-seven.vercel.app"
+              className="flex items-center gap-2 bg-black text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-orange transition-colors"
+            >
+              <Download className="w-4 h-4" /> Download App
+            </a>
+          </li>
+          <li><a href="https://interactive-sigma-seven.vercel.app" className="bg-black text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-orange transition-colors">Start Learning</a></li>
+        </ul>
+        <div className="md:hidden flex items-center gap-3">
+          <a href="https://interactive-sigma-seven.vercel.app" className="p-2 bg-black text-white rounded-full"><Download className="w-4 h-4" /></a>
+          <a href="https://interactive-sigma-seven.vercel.app" className="bg-black text-white px-4 py-2 rounded-full text-xs font-semibold">Login</a>
         </div>
       </nav>
 
       {/* HERO */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-32 pb-20 overflow-hidden">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-primary/10 blur-[120px] pointer-events-none" />
-        
+      <section className="relative min-h-[92vh] flex flex-col justify-center px-6 md:px-16 py-16 md:py-32 overflow-hidden">
+        <div className="absolute -top-[120px] -right-[100px] w-[600px] h-[600px] bg-[radial-gradient(circle_at_40%_40%,#FF8A3D22,transparent_70%)] rounded-full pointer-events-none" />
+        <div className="absolute -bottom-[80px] -left-[80px] w-[400px] h-[400px] bg-[radial-gradient(circle_at_60%_60%,#F4600C11,transparent_70%)] rounded-full pointer-events-none" />
+
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 bg-orange-primary/10 border border-orange-primary/15 rounded-full px-4 py-1.5 text-[0.78rem] font-medium text-orange-bright tracking-wider uppercase mb-8"
+          className="inline-flex items-center gap-2 bg-orange-pale border border-orange/20 text-orange-dark px-4 py-1.5 rounded-full text-[0.8rem] font-semibold mb-8 w-fit tracking-wide"
         >
-          <span className="w-1.5 h-1.5 bg-orange-primary rounded-full animate-pulse-slow" />
-          Kenya CBC & KCSE · Grades 1–12
+          <div className="w-[7px] h-[7px] bg-orange rounded-full animate-pulse-custom" />
+          Built for CBC · Grades 6 – 9
         </motion.div>
 
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="font-display font-extrabold text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-tight max-w-4xl mb-6"
+          className="font-display text-5xl md:text-8xl font-extrabold leading-[1.05] tracking-tighter max-w-[800px] mb-6"
         >
-          Study Smarter with <em className="not-italic text-orange-primary">Interactive</em> CBC Notes
+          Learn <span className="text-orange relative inline-block after:content-[''] after:absolute after:bottom-1 md:after:bottom-4 after:left-0 after:right-0 after:h-1 md:after:h-2 after:bg-orange/30 after:rounded-full">smarter,</span><br/>
+          not harder.
         </motion.h1>
 
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-base md:text-lg text-text-dim max-w-xl leading-relaxed font-light mb-12"
+          className="text-lg md:text-xl text-gray max-w-[560px] leading-relaxed mb-10"
         >
-          AziLearn gives Kenyan students from Grade 1 to 12, including KCSE candidates, interactive notes, presentation slides, audio narration, and quizzes — not boring PDFs. Pay with M-Pesa, learn instantly.
+          AziLearn brings your CBC subjects to life — with interactive lessons, timed exams, and tools built for Kenyan students who want to actually understand, not just memorise.
         </motion.p>
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="flex flex-wrap justify-center gap-4"
+          className="flex flex-wrap gap-4 items-center mb-12"
         >
-          <a 
-            href="https://interactive-sigma-seven.vercel.app" 
-            className="bg-orange-primary hover:bg-orange-bright text-white font-display font-bold text-base px-9 py-4 rounded-xl transition-all shadow-[0_0_30px_rgba(255,107,0,0.3)] hover:shadow-[0_0_40px_rgba(255,107,0,0.45)] hover:-translate-y-1"
-          >
-            Get Started
+          <a href="https://interactive-sigma-seven.vercel.app" className="bg-orange text-white px-8 py-4 rounded-full text-base font-bold font-display hover:bg-orange-dark transition-all hover:-translate-y-0.5 flex items-center gap-2 shadow-lg shadow-orange/20">
+            Start Learning <ArrowRight className="w-5 h-5" />
           </a>
-          <button 
-            onClick={handleDownload}
-            className="bg-black hover:bg-gray-800 text-white font-display font-bold text-base px-9 py-4 rounded-xl transition-all shadow-[0_0_30px_rgba(0,0,0,0.1)] hover:-translate-y-1 flex items-center gap-2"
+          <a 
+            href="https://interactive-sigma-seven.vercel.app"
+            className="bg-transparent text-black px-8 py-4 rounded-full text-base font-semibold border-2 border-black hover:bg-black hover:text-white transition-all flex items-center gap-2"
           >
             <Download className="w-5 h-5" /> Download App
-          </button>
-          <a 
-            href="#subjects" 
-            className="bg-transparent text-text-primary font-display font-semibold text-base px-9 py-4 rounded-xl border border-black/10 transition-all hover:border-orange-primary hover:text-orange-primary hover:-translate-y-1"
-          >
-            View Subjects
           </a>
         </motion.div>
+
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="text-[0.82rem] text-gray flex items-center gap-2 mb-16"
+        >
+          ✦ Join thousands of students already ahead of the curve
+        </motion.p>
+
+        <div className="flex flex-wrap gap-10 md:gap-20 pt-8 border-t border-gray-light">
+          <div className="flex flex-col">
+            <div className="font-display text-3xl md:text-4xl font-extrabold tracking-tighter">9<span className="text-orange">+</span></div>
+            <div className="text-[0.82rem] text-gray mt-1">CBC subjects covered</div>
+          </div>
+          <div className="flex flex-col">
+            <div className="font-display text-3xl md:text-4xl font-extrabold tracking-tighter">4</div>
+            <div className="text-[0.82rem] text-gray mt-1">Grade levels (6 – 9)</div>
+          </div>
+          <div className="flex flex-col">
+            <div className="font-display text-3xl md:text-4xl font-extrabold tracking-tighter">100<span className="text-orange">%</span></div>
+            <div className="text-[0.82rem] text-gray mt-1">Interactive — no static PDFs</div>
+          </div>
+          <div className="flex flex-col">
+            <div className="font-display text-3xl md:text-4xl font-extrabold tracking-tighter">0</div>
+            <div className="text-[0.82rem] text-gray mt-1">Boring lessons. Ever.</div>
+          </div>
+        </div>
       </section>
 
-      {/* GRADES STRIP */}
-      <div className="border-y border-orange-primary/15 py-5 flex flex-wrap items-center justify-center gap-8 md:gap-12 bg-bg-card px-6">
-        {["Grades 1–6 (Primary)", "Grades 7–9 (JSS)", "Grades 10–12 (SSS)", "KCSE Revision (Form 1–4)", "M-Pesa Payments"].map((item, i) => (
-          <div key={i} className="flex items-center gap-2.5 text-sm text-text-dim font-normal whitespace-nowrap">
-            <div className="w-2 h-2 bg-orange-primary rounded-full" />
-            {item}
+      {/* SUBJECTS STRIP */}
+      <div id="subjects" className="bg-black py-4 px-6 md:px-16 flex gap-4 overflow-x-auto no-scrollbar">
+        {subjects.map((subject, i) => (
+          <div 
+            key={i} 
+            className={`whitespace-nowrap px-5 py-2 rounded-full text-[0.82rem] font-medium transition-colors cursor-default border ${i === 0 ? 'bg-orange border-orange text-white' : 'bg-white/10 border-white/20 text-white hover:bg-orange hover:border-orange'}`}
+          >
+            {subject}
           </div>
         ))}
       </div>
 
-      {/* SUBJECTS */}
-      <section id="subjects" className="max-w-6xl mx-auto px-6 py-24">
-        <div className="text-xs font-semibold tracking-[0.15em] uppercase text-orange-primary mb-4">What We Cover</div>
-        <h2 className="font-display font-extrabold text-3xl md:text-4xl leading-tight mb-4">CBC Subjects,<br/>Brought to Life</h2>
-        <p className="text-text-dim text-base leading-relaxed max-w-lg font-light mb-14">
-          Every subject is built with animations, drag-and-drop activities, and self-tests — designed around the official KICD CBC syllabus.
-        </p>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {subjects.map((subject, i) => (
-            <motion.div 
-              key={i}
-              whileHover={{ y: -3 }}
-              className="group relative bg-bg-card border border-orange-primary/15 rounded-2xl p-7 transition-all hover:border-orange-primary/40 hover:bg-bg-card-hover cursor-default overflow-hidden"
-            >
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-orange-primary scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100" />
-              <subject.icon className={`w-10 h-10 mb-4 ${subject.color}`} />
-              <div className="font-display font-bold text-base mb-1.5">{subject.name}</div>
-              <div className="text-xs text-text-dim">Grades 1 – 12 & KCSE</div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* WHAT YOU GET */}
-      <section className="bg-bg-card border-t border-orange-primary/15">
-        <div className="max-w-6xl mx-auto px-6 py-24">
-          <div className="text-xs font-semibold tracking-[0.15em] uppercase text-orange-primary mb-4">What's Included</div>
-          <h2 className="font-display font-extrabold text-3xl md:text-4xl leading-tight mb-4">Everything a Student Needs</h2>
-          <p className="text-text-dim text-base leading-relaxed max-w-lg font-light mb-14">
-            Every subscription gives you access to three types of learning materials, all CBC-aligned.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {features.map((feature, i) => (
-              <div 
-                key={i} 
-                className={`bg-bg-card-hover border rounded-2xl p-9 transition-all ${feature.highlight ? 'border-orange-primary/35 shadow-[0_0_30px_rgba(255,107,0,0.07)]' : 'border-orange-primary/15'}`}
-              >
-                <div className="text-4xl mb-4">{feature.emoji}</div>
-                <div className="font-display font-bold text-lg mb-2.5">{feature.title}</div>
-                <div className="text-text-dim text-sm leading-relaxed font-light">{feature.desc}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* HOW IT WORKS */}
-      <section className="bg-bg-card border-y border-orange-primary/15">
-        <div className="max-w-6xl mx-auto px-6 py-24">
-          <div className="text-xs font-semibold tracking-[0.15em] uppercase text-orange-primary mb-4">How It Works</div>
-          <h2 className="font-display font-extrabold text-3xl md:text-4xl leading-tight mb-16 text-center md:text-left">3 Steps to Start Learning</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-l border-orange-primary/15 md:border-l-0">
-            {steps.map((step, i) => (
-              <div key={i} className="p-8 md:p-10 border-b md:border-b-0 md:border-r border-orange-primary/15 last:border-0 relative">
-                <div className="font-display text-5xl font-extrabold text-orange-primary/15 leading-none mb-4">{step.num}</div>
-                <div className="font-display font-bold text-base mb-2.5">{step.title}</div>
-                <div className="text-text-dim text-sm leading-relaxed font-light">{step.desc}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <section id="how" className="px-6 md:px-16 py-16 md:py-28">
+        <p className="text-[0.78rem] font-bold tracking-[0.12em] text-orange uppercase mb-4">How it works</p>
+        <h2 className="font-display text-3xl md:text-5xl font-extrabold tracking-tight mb-4 max-w-[560px] leading-tight">Three steps to getting ahead</h2>
+        <p className="text-gray max-w-[480px] leading-relaxed mb-12 text-base">No complicated setup. Just open, learn, and track how far you've come.</p>
 
-      {/* PRICING */}
-      <section id="pricing" className="max-w-6xl mx-auto px-6 py-24">
-        <div className="text-xs font-semibold tracking-[0.15em] uppercase text-orange-primary mb-4">Subscription Plans</div>
-        <h2 className="font-display font-extrabold text-3xl md:text-4xl leading-tight mb-4">Simple, Affordable Pricing</h2>
-        <p className="text-text-dim text-base leading-relaxed max-w-lg font-light mb-14">
-          All plans give full access to every subject and every grade. Pay with M-Pesa anytime.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
-          {plans.map((plan, i) => (
-            <motion.div 
-              key={i}
-              whileHover={{ y: -4 }}
-              className={`relative bg-bg-card-hover border rounded-2xl p-9 transition-all ${plan.featured ? 'border-orange-primary bg-gradient-to-br from-[#fff7ed] to-bg-card-hover shadow-[0_10px_40px_rgba(255,107,0,0.1)]' : 'border-orange-primary/15'}`}
-            >
-              {plan.featured && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-primary text-white font-display font-bold text-[0.7rem] tracking-widest uppercase px-4 py-1 rounded-full whitespace-nowrap">
-                  Most Popular
-                </div>
-              )}
-              <div className="text-xs text-text-dim uppercase tracking-[0.1em] mb-3">{plan.period}</div>
-              <div className="font-display font-extrabold text-4xl mb-1">
-                KES {plan.price}<span className="text-base font-normal text-text-dim">/{plan.period === 'Monthly' ? 'mo' : plan.period.toLowerCase()}</span>
-              </div>
-              <p className="text-sm text-text-dim font-light mb-7 leading-relaxed">{plan.desc}</p>
-              <ul className="space-y-2.5">
-                {["Full subject access", "All Grades 1–12 & KCSE", "Interactive notes & slides", "Audio narration", "Quizzes & activities", "Pay via M-Pesa"].map((feat, j) => (
-                  <li key={j} className="text-sm text-text-dim flex items-center gap-2.5">
-                    <Check className="w-4 h-4 text-orange-primary" />
-                    {feat}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {steps.map((step, i) => (
+            <div key={i} className="bg-white border border-gray-light rounded-[20px] p-8 transition-all hover:border-orange hover:-translate-y-1 group">
+              <div className="font-display text-5xl font-extrabold text-orange-pale leading-none mb-4 transition-colors group-hover:text-orange/10">{step.num}</div>
+              <div className="w-11 h-11 bg-orange-pale rounded-xl flex items-center justify-center text-xl mb-4">{step.icon}</div>
+              <h3 className="font-display text-lg font-bold mb-2">{step.title}</h3>
+              <p className="text-[0.9rem] text-gray leading-relaxed">{step.desc}</p>
+            </div>
           ))}
         </div>
+      </section>
 
-        <div className="inline-flex items-center gap-3 bg-[#009639]/10 border border-[#009639]/25 rounded-xl px-6 py-4 text-sm text-[#4CAF50] font-medium">
-          <span className="bg-[#009639] text-white font-display font-extrabold text-[0.7rem] px-2 py-1 rounded tracking-wider">M-PESA</span>
-          All payments are processed securely via M-Pesa. No credit card required.
+      {/* FEATURES */}
+      <section id="features" className="bg-white px-6 md:px-16 py-16 md:py-28">
+        <p className="text-[0.78rem] font-bold tracking-[0.12em] text-orange uppercase mb-4">What you get</p>
+        <h2 className="font-display text-3xl md:text-5xl font-extrabold tracking-tight mb-4 max-w-[560px] leading-tight">Everything a serious student needs</h2>
+        <p className="text-gray max-w-[480px] leading-relaxed mb-12 text-base">AziLearn is built around how CBC students actually study — not how textbooks think you do.</p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-gray-light border border-gray-light rounded-[20px] overflow-hidden">
+          {features.map((feature, i) => (
+            <div key={i} className="bg-white p-8 transition-colors hover:bg-orange-pale group">
+              <div className="text-3xl mb-4">{feature.icon}</div>
+              <h3 className="font-display text-base font-bold mb-2">{feature.title}</h3>
+              <p className="text-[0.875rem] text-gray leading-relaxed mb-4">{feature.desc}</p>
+              <span className="inline-block text-[0.72rem] font-bold tracking-wider text-orange-dark bg-orange-pale px-2.5 py-1 rounded-full uppercase">{feature.tag}</span>
+            </div>
+          ))}
         </div>
       </section>
+
+      {/* TESTIMONIALS */}
+      <section className="bg-off-white px-6 md:px-16 py-16 md:py-28">
+        <p className="text-[0.78rem] font-bold tracking-[0.12em] text-orange uppercase mb-4">Student voices</p>
+        <h2 className="font-display text-3xl md:text-5xl font-extrabold tracking-tight mb-4 max-w-[560px] leading-tight">What students are saying</h2>
+        <p className="text-gray max-w-[480px] leading-relaxed mb-12 text-base">Real stories from students using AziLearn across Kenya.</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {testimonials.map((t, i) => (
+            <div key={i} className="bg-white border border-gray-light rounded-[20px] p-8">
+              <div className="flex gap-0.5 text-orange mb-4 text-sm">
+                {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+              </div>
+              <p className="text-[0.95rem] leading-relaxed text-black italic mb-6">"{t.text}"</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-orange flex items-center justify-center font-display font-bold text-sm text-white">{t.initial}</div>
+                <div>
+                  <div className="font-semibold text-[0.875rem]">{t.name}</div>
+                  <div className="text-[0.78rem] text-gray">{t.role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <div className="px-4 md:px-12 pb-8">
+        <section className="bg-black rounded-[28px] px-8 md:px-20 py-16 md:py-24 text-center relative overflow-hidden">
+          <div className="absolute -top-[100px] left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-[radial-gradient(ellipse,#F4600C33,transparent_70%)] pointer-events-none" />
+          <h2 className="font-display text-4xl md:text-6xl font-extrabold text-white tracking-tighter mb-4 relative">Your future self<br/><span className="text-orange-light">starts today.</span></h2>
+          <p className="text-[#999] text-lg max-w-[480px] mx-auto leading-relaxed mb-10 relative">Don't wait for exam time to start revising. Join the students who are already ahead — and stay there.</p>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 relative">
+            <a href="https://interactive-sigma-seven.vercel.app" className="bg-orange text-white px-10 py-4 rounded-full text-lg font-bold font-display hover:bg-orange-dark transition-all">Start Learning Now →</a>
+            <a href="https://interactive-sigma-seven.vercel.app" className="bg-white text-black px-10 py-4 rounded-full text-lg font-bold font-display hover:bg-gray-light transition-all flex items-center gap-2">
+              <Download className="w-5 h-5" /> Download App
+            </a>
+          </div>
+          <p className="mt-6 text-[0.8rem] text-[#666] relative">Access is open now. A small fee will apply as we grow — we'll always tell you before that happens.</p>
+        </section>
+      </div>
 
       {/* FOOTER */}
-      <footer className="border-t border-orange-primary/15 px-6 md:px-12 py-10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-        <div className="text-sm text-text-dim">
-          <strong className="text-text-primary font-display">AZILEARN</strong> · Interactive CBC Study Materials for Kenyan Students<br/>
-          <span className="text-[0.78rem]">© 2026 AziLearn. All rights reserved.</span>
-        </div>
-        <div className="flex gap-6 items-center">
-          <a href="#subjects" className="text-sm text-text-dim hover:text-orange-primary transition-colors">Subjects</a>
-          <a href="#pricing" className="text-sm text-text-dim hover:text-orange-primary transition-colors">Pricing</a>
-          <a href="https://interactive-sigma-seven.vercel.app" className="text-sm text-text-dim hover:text-orange-primary transition-colors">Login</a>
-        </div>
+      <footer className="px-6 md:px-16 py-8 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-gray-light">
+        <a href="/" className="font-display font-extrabold text-xl tracking-tighter">
+          Azi<span className="text-orange">Learn</span>
+        </a>
+        <ul className="flex gap-6 list-none">
+          <li><a href="#subjects" className="text-[0.82rem] text-gray hover:text-orange transition-colors">Subjects</a></li>
+          <li><a href="#how" className="text-[0.82rem] text-gray hover:text-orange transition-colors">How it works</a></li>
+          <li><a href="mailto:hello@azilearn.co.ke" className="text-[0.82rem] text-gray hover:text-orange transition-colors">Contact</a></li>
+        </ul>
+        <p className="text-[0.82rem] text-gray">© 2025 AziLearn · Built in Kenya 🇰🇪</p>
       </footer>
     </div>
   );
